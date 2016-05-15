@@ -1,0 +1,16 @@
+{
+    "listen_port":          80,
+    "default_subdomain":    "www",
+    "debug":                false,
+    "log_redirects":        true,
+    "url_overrides": [
+        {
+            "hostname":     "example.com",
+            "subdomain":    "chat"
+        },
+        {
+            "hostname":     "localhost",
+            "subdomain":    "example"
+        }
+    ]
+}
