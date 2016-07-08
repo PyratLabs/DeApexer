@@ -3,14 +3,32 @@
     "default_subdomain":    "www",
     "debug":                false,
     "log_redirects":        true,
-    "url_overrides": [
+    "url_overrides":        [
         {
-            "hostname":     "example.com",
-            "subdomain":    "chat"
+            "hostname":         "example.com",
+            "subdomain":        "chat.example.com",
+            "default_path":     null,
+            "path_overrides":    [
+                {
+                    "path_source":          "/",
+                    "path_destination":     "/about"
+                },
+                {
+                    "path_source":          "/food",
+                    "path_destination":     "/cake"
+                }
+            ]
         },
         {
-            "hostname":     "localhost",
-            "subdomain":    "example"
+            "hostname":         "localhost",
+            "subdomain":        "pyrat.io",
+            "default_path":     null,
+            "path_overrides":    [
+                {
+                    "path_source":          "/echo",
+                    "path_destination":     "/print"
+                }
+            ]
         }
     ]
 }

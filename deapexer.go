@@ -61,6 +61,13 @@ type Configuration struct {
 type UrlOverride struct {
     Hostname            string          `json:"hostname"`
     Subdomain           string          `json:"subdomain"`
+    DefaultPath         string          `json:"default_path"`
+    PathOverrides       []PathOverride  `json:"path_overrides"`
+}
+
+type PathOverride struct {
+    Source              string          `json:"path_source"`
+    Destination         string          `json:"path_destination"`
 }
 
 /*
@@ -77,7 +84,7 @@ func init() {
         "/etc/deapexer/config.json",
         "Configuration File")
 
-    // Are we wanting to not use Syslog?
+    // Are we wanting to avoid using Syslog?
     noLogs := flag.Bool("n", false, "Don't Log to Syslog")
 
     // Parse flag input
@@ -128,8 +135,8 @@ func check(e error) {
 func deapex(w http.ResponseWriter, r *http.Request) {
     // Are we logging redirects?
     if config.Debug == true || config.LogRedirect == true {
-        log.Print("URL: ", r.Host)
-        log.Print("RequestURI: ", r.RequestURI)
+        log.Print("Request Host: ", r.Host)
+        log.Print("Request URI: ", r.RequestURI)
     }
 
     // Obtain our host and URI from request data.
@@ -145,22 +152,54 @@ func deapex(w http.ResponseWriter, r *http.Request) {
     // Variable to contain our subdomain redirect.
     var redirectSubdomain string
 
+    // Subdomain Redirect Key
+    var oKey int
+
+    // Variable to contain our path redirect.
+    var redirectPath string
+
     // Iterate through all the overrides we are storing in memory.
     for i := 0 ; i < len(config.Overrides) ; i++ {
         // Does the hostname value match override hostname?
         if config.Overrides[i].Hostname == hostName {
             // Set our redirect subdomain to this override.
             redirectSubdomain = config.Overrides[i].Subdomain
+            oKey = i
         }
     }
 
     // If there is no redirect subdomain in overrides, use the default.
     if redirectSubdomain == "" {
-        redirectSubdomain = config.DefaultSubdomain
+        redirectSubdomain = config.DefaultSubdomain + "." + hostName
+    } else {
+        // Iterate through the path overrides for this hostname.
+        for i := 0 ; i < len(config.Overrides[oKey].PathOverrides) ; i++ {
+            // Does the request URI value match override path?
+            if config.Overrides[oKey].PathOverrides[i].Source == requestURI {
+                // Set our URI to this path.
+                redirectPath = config.Overrides[oKey].PathOverrides[i].
+                    Destination
+            }
+        }
+    }
+
+    // How are we going to redirect the path?
+    if redirectPath == "" {
+        if config.Overrides[oKey].DefaultPath != "" {
+            requestURI = config.Overrides[oKey].DefaultPath
+        }
+    } else {
+        requestURI = redirectPath
+    }
+
+    // Debug, where are we going?
+    if config.Debug == true || config.LogRedirect == true {
+        log.Print("New Host: ", redirectSubdomain)
+        log.Print("New Request URI: ", requestURI)
     }
 
     // Build our forward address.
-    forwardAddr := "http://" + redirectSubdomain + "." + hostName + requestURI
+    forwardAddr := "http://" + redirectSubdomain + requestURI
 
     // Serve our 301 redirect.
     http.Redirect(w, r, forwardAddr, 301)
