@@ -165,6 +165,7 @@ func deapex(w http.ResponseWriter, r *http.Request) {
             // Set our redirect subdomain to this override.
             redirectSubdomain = config.Overrides[i].Subdomain
             oKey = i
+            break
         }
     }
 
@@ -179,6 +180,7 @@ func deapex(w http.ResponseWriter, r *http.Request) {
                 // Set our URI to this path.
                 redirectPath = config.Overrides[oKey].PathOverrides[i].
                     Destination
+                break
             }
         }
     }
