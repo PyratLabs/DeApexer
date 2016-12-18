@@ -1,4 +1,4 @@
-FROM golang:1.6-alpine
+FROM golang:1.7-alpine
 MAINTAINER Xan Manning <xan.manning@gmail.com>
 
 EXPOSE 80

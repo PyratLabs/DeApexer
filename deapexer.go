@@ -1,31 +1,31 @@
 /*
- * ############################################################
- * #                       DEAPEXER                           #
- * ############################################################
- * # Written by Xan Manning, PyratLabs 2016. http://pyrat.io/ #
- * ############################################################
- * #                                                          #
- * # Released under the MIT License. Please see LICENSE       #
- * # -------------------------------------------------------- #
- * #                                                          #
- * # This application has a very specific use case for        #
- * # dealing with redirecting the apex record of a domain to  #
- * # a subdomain. The main reason for this is that a domain   #
- * # apex record must not be a CNAME, it must be an A record. #
- * #                                                          #
- * # A good example of when to use this is when working with  #
- * # AWS Elastic Load Balancers when you want to avoid using  #
- * # Route 53. This has been something that I have had to     #
- * # work around with customers. Often the solution is to 301 #
- * # redirect in Apache on one of the load balanced EC2       #
- * # instances. This causes disproportionate load on EC2s.    #
- * #                                                          #
- * # What DeApexer allows you to do is host one shared        #
- * # service that generates these redirects for any domain    #
- * # with a low cost to disk I/O. Configuration is stored in  #
- * # memory so this is fairly light on resources.             #
- * #                                                          #
- * ############################################################
+ * +----------------------------------------------------------+
+ * |                       DEAPEXER                           |
+ * +----------------------------------------------------------+
+ * | Written by Xan Manning, PyratLabs 2016. http://pyrat.io/ |
+ * +----------------------------------------------------------+
+ * |                                                          |
+ * | Released under the MIT License. Please see LICENSE       |
+ * +----------------------------------------------------------+
+ * |                                                          |
+ * | This application has a very specific use case for        |
+ * | dealing with redirecting the apex record of a domain to  |
+ * | a subdomain. The main reason for this is that a domain   |
+ * | apex record must not be a CNAME, it must be an A record. |
+ * |                                                          |
+ * | A good example of when to use this is when working with  |
+ * | AWS Elastic Load Balancers when you want to avoid using  |
+ * | Route 53. This has been something that I have had to     |
+ * | work around with customers. Often the solution is to 301 |
+ * | redirect in Apache on one of the load balanced EC2       |
+ * | instances. This causes disproportionate load on EC2s.    |
+ * |                                                          |
+ * | What DeApexer allows you to do is host one shared        |
+ * | service that generates these redirects for any domain    |
+ * | with a low cost to disk I/O. Configuration is stored in  |
+ * | memory so this is fairly light on resources.             |
+ * |                                                          |
+ * +----------------------------------------------------------+
  */
 
 package main
